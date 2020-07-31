@@ -1,6 +1,9 @@
 import styled from 'styled-components/native';
+import { Dimensions } from 'react-native';
 import { Camera, CameraProps } from 'expo-camera';
 import { RectButton } from 'react-native-gesture-handler';
+
+const { width } = Dimensions.get('screen');
 
 export const Container = styled.View`
   flex: 1;
@@ -57,4 +60,22 @@ export const RequestPermissionButtonText = styled.Text`
   text-align: center;
   color: #fff;
   font-weight: bold;
+`;
+
+export const ScannerContainer = styled.View`
+  flex: 1;
+`;
+
+export const ScannerDarkBackground = styled.View`
+  flex: 1;
+  background: rgba(0, 0, 0, 0.8);
+`;
+
+export const ScannerMiddleLightBox = styled.View`
+  height: ${width * 0.65}px;
+  width: ${width * 0.65}px;
+`;
+
+export const ScannerMiddleContainer = styled.View`
+  flex-direction: row;
 `;

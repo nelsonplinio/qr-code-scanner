@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { canOpenURL } from 'expo-linking';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Modalize } from 'react-native-modalize';
-
+import { Dimensions } from 'react-native';
 import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
 
 import {
@@ -14,8 +13,11 @@ import {
   AccessDeniedDescriptionText,
   RequestPermissionButton,
   RequestPermissionButtonText,
+  ScannerContainer,
+  ScannerDarkBackground,
+  ScannerMiddleContainer,
+  ScannerMiddleLightBox,
 } from './styles';
-import { BarCodeScannerData } from '../../models/BarCodeScannerData';
 
 interface BarCodeScanned {
   data: string;
@@ -23,11 +25,15 @@ interface BarCodeScanned {
 }
 
 const Scanner: React.FC = () => {
-  const modalRef = useRef<Modalize>(null);
-
   const { openOptions } = useScannerOptionsModal();
 
   const [scanned, setScanned] = useState(false);
+
+  const scanIconSize = useMemo(() => {
+    const { width } = Dimensions.get('screen');
+
+    return width * 0.65;
+  }, []);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
@@ -60,10 +66,8 @@ const Scanner: React.FC = () => {
           setScanned(false);
         },
       );
-
-      modalRef.current?.open();
     },
-    [],
+    [openOptions],
   );
 
   useEffect(() => {
@@ -100,6 +104,15 @@ const Scanner: React.FC = () => {
         onBarCodeScanned={scanned ? undefined : handleOnBarCodeScanned}
         ratio="16:9"
       />
+      <ScannerContainer>
+        <ScannerDarkBackground />
+        <ScannerMiddleContainer>
+          <ScannerDarkBackground />
+          <ScannerMiddleLightBox />
+          <ScannerDarkBackground />
+        </ScannerMiddleContainer>
+        <ScannerDarkBackground />
+      </ScannerContainer>
     </Container>
   );
 };
