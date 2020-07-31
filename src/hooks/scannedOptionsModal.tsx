@@ -12,6 +12,7 @@ import { BarCodeScannerData } from '../models/BarCodeScannerData';
 interface ModalContextData {
   openOptions: (data: BarCodeScannerData, onClosed?: () => void) => void;
   closeOptions: () => void;
+  dataScanned: BarCodeScannerData;
 }
 
 interface ScannerData {
@@ -24,12 +25,12 @@ const ModalContext = createContext<ModalContextData>({} as ModalContextData);
 const ScannerOptionsModalProvider: React.FC = ({ children }) => {
   const modalRef = useRef<Modalize>(null);
 
-  const [scannerData, setScannerData] = useState<ScannerData>({
+  const [scannedData, setScannedData] = useState<ScannerData>({
     data: {},
   } as ScannerData);
 
   const openOptions = useCallback((data: BarCodeScannerData, onClose) => {
-    setScannerData({ data, onClose });
+    setScannedData({ data, onClose });
     modalRef.current?.open();
   }, []);
 
@@ -38,12 +39,14 @@ const ScannerOptionsModalProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <ModalContext.Provider value={{ openOptions, closeOptions }}>
+    <ModalContext.Provider
+      value={{ openOptions, closeOptions, dataScanned: scannedData.data }}
+    >
       {children}
       <ScannedOptionModal
         ref={modalRef}
-        dataScanned={scannerData.data}
-        onClose={scannerData.onClose}
+        dataScanned={scannedData.data}
+        onClose={scannedData.onClose}
       />
     </ModalContext.Provider>
   );
