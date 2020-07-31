@@ -1,8 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Camera from './src/pages/Camera';
+import { Routes } from './src/Routes';
 
-export default function App() {
-  return <Camera />;
-}
+const App: React.FC = () => {
+  return (
+    <>
+      <StatusBar backgroundColor="#24292e" style="light" />
+      <Routes />
+    </>
+  );
+};
+
+export { App };

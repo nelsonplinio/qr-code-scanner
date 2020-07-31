@@ -8,6 +8,7 @@ import React, {
 import { Feather } from '@expo/vector-icons';
 import { openURL, canOpenURL } from 'expo-linking';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera as ExpoCamera } from 'expo-camera';
 import { Share, Alert, Dimensions, Clipboard } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
@@ -38,7 +39,7 @@ interface LinkScanned {
   date: Date;
 }
 
-const Camera: React.FC = () => {
+const Scanner: React.FC = () => {
   const modalRef = useRef<Modalize>(null);
   const [dataScanned, setDataScanned] = useState<LinkScanned>(
     {} as LinkScanned,
@@ -153,6 +154,9 @@ const Camera: React.FC = () => {
         modalHeight={modalHeight}
         snapPoint={modalSnapPoint}
         onClosed={handleModalClosed}
+        modalStyle={{
+          backgroundColor: '#24292e',
+        }}
       >
         <ModalContainer>
           <ModalTitle>Contaudo scaneado</ModalTitle>
@@ -191,4 +195,4 @@ const Camera: React.FC = () => {
   );
 };
 
-export default React.memo(Camera);
+export default React.memo(Scanner);

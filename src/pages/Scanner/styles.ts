@@ -20,6 +20,7 @@ export const ModalContainer = styled.View`
 
 export const ModalTitle = styled.Text`
   font-size: 32px;
+  color: #f1f1f1;
 `;
 
 export const TextScanned = styled.Text`
@@ -27,6 +28,8 @@ export const TextScanned = styled.Text`
   border-radius: 10px;
   padding: 16px 8px;
   margin-top: 22px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
 `;
 
 export const ActionsContainer = styled.View`
@@ -42,7 +45,7 @@ export const ActionButton = styled(RectButton)`
 export const ActionButtonText = styled.Text`
   margin-left: 16px;
   font-size: 18px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.5);
   margin-right: auto;
 `;
 
@@ -50,7 +53,7 @@ export const AccessDeniedContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: #24292e;
   padding: 22px;
 `;
 
