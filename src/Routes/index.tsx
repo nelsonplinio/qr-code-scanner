@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Scanner from '../pages/Scanner';
 import SavedList from '../pages/SavedList';
+import HistoryList from '../pages/HistoryList';
 
 const BottomTabNavigator = createBottomTabNavigator();
 
@@ -12,6 +13,7 @@ const Routes: React.FC = () => {
   return (
     <NavigationContainer>
       <BottomTabNavigator.Navigator
+        initialRouteName="Scanner"
         tabBarOptions={{
           activeTintColor: '#7159c1',
           inactiveTintColor: '#f1f1f1',
@@ -24,6 +26,21 @@ const Routes: React.FC = () => {
           },
         }}
       >
+        <BottomTabNavigator.Screen
+          name="HistoryList"
+          component={HistoryList}
+          options={{
+            title: 'Historico',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="history"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+
         <BottomTabNavigator.Screen
           name="Scanner"
           component={Scanner}
@@ -39,6 +56,7 @@ const Routes: React.FC = () => {
             ),
           }}
         />
+
         <BottomTabNavigator.Screen
           name="SavedList"
           component={SavedList}

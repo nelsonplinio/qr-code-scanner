@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { canOpenURL } from 'expo-linking';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Dimensions } from 'react-native';
 import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
+import { useHistoryLinkScanned } from '../../hooks/historyLinkScanned';
 
 import {
   CameraExpo,
@@ -25,15 +25,10 @@ interface BarCodeScanned {
 }
 
 const Scanner: React.FC = () => {
+  const { saveLink } = useHistoryLinkScanned();
   const { openOptions } = useScannerOptionsModal();
 
   const [scanned, setScanned] = useState(false);
-
-  const scanIconSize = useMemo(() => {
-    const { width } = Dimensions.get('screen');
-
-    return width * 0.65;
-  }, []);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
@@ -56,18 +51,19 @@ const Scanner: React.FC = () => {
 
       const canOpen = await canOpenURL(data);
 
-      openOptions(
-        {
-          data,
-          canOpen,
-          date: new Date(),
-        },
-        () => {
-          setScanned(false);
-        },
-      );
+      const barCodeData = {
+        data,
+        canOpen,
+        date: new Date(),
+      };
+
+      saveLink(barCodeData);
+
+      openOptions(barCodeData, () => {
+        setScanned(false);
+      });
     },
-    [openOptions],
+    [openOptions, saveLink],
   );
 
   useEffect(() => {
@@ -104,13 +100,18 @@ const Scanner: React.FC = () => {
         onBarCodeScanned={scanned ? undefined : handleOnBarCodeScanned}
         ratio="16:9"
       />
+
       <ScannerContainer>
         <ScannerDarkBackground />
+
         <ScannerMiddleContainer>
           <ScannerDarkBackground />
+
           <ScannerMiddleLightBox />
+
           <ScannerDarkBackground />
         </ScannerMiddleContainer>
+
         <ScannerDarkBackground />
       </ScannerContainer>
     </Container>
