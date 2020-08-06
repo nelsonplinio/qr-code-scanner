@@ -30,7 +30,7 @@ const Routes: React.FC = () => {
           name="HistoryList"
           component={HistoryList}
           options={{
-            title: 'Historico',
+            title: 'Histórico',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="history"

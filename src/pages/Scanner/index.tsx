@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Platform } from 'react-native';
+import * as Permissions from 'expo-permissions';
 import { Feather } from '@expo/vector-icons';
 import { canOpenURL } from 'expo-linking';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -33,6 +35,13 @@ const Scanner: React.FC = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
   const handleRequestPermission = useCallback(async () => {
+    if (Platform.OS === 'web') {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA);
+
+      setHasCameraPermission(status === 'granted');
+
+      return;
+    }
     const permission = await CameraExpo.getPermissionsAsync();
 
     if (!permission.canAskAgain || permission.granted) {

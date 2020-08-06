@@ -5,13 +5,14 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { parseISO } from 'date-fns';
 import { AsyncStorage } from 'react-native';
 import { BarCodeScannerData } from '../models/BarCodeScannerData';
 
 interface ContextData {
   saveLink(data: BarCodeScannerData): void;
   historyScannedLinks: BarCodeScannerData[];
-  removeLink(link: string): void;
+  removeLink(data: BarCodeScannerData): void;
 }
 
 const HistoryLinkScannedContext = createContext<ContextData>({} as ContextData);
@@ -21,24 +22,14 @@ const HistoryLinkScannedProvider: React.FC = ({ children }) => {
     BarCodeScannerData[]
   >([]);
 
-  const saveLink = useCallback(
-    async (data: BarCodeScannerData) => {
-      const checkContainsThisLink = historyScannedLinks.find(
-        saved => saved.data === data.data,
-      );
+  const saveLink = useCallback(async (data: BarCodeScannerData) => {
+    const id = String(data.date.getTime());
+    setHistoryScannedLinks(currentList => [{ ...data, id }, ...currentList]);
+  }, []);
 
-      if (checkContainsThisLink) {
-        return;
-      }
-
-      setHistoryScannedLinks([...historyScannedLinks, data]);
-    },
-    [historyScannedLinks],
-  );
-
-  const removeLink = useCallback((link: string) => {
+  const removeLink = useCallback((data: BarCodeScannerData) => {
     setHistoryScannedLinks(currentValue =>
-      currentValue.filter(({ data }) => data !== link),
+      currentValue.filter(({ id }) => id !== data.id),
     );
   }, []);
 
@@ -49,13 +40,30 @@ const HistoryLinkScannedProvider: React.FC = ({ children }) => {
       );
 
       if (historySaved) {
-        setHistoryScannedLinks(JSON.parse(historySaved));
+        let history: BarCodeScannerData[] = JSON.parse(historySaved);
+
+        history = history
+          .map(linkData => {
+            return {
+              ...linkData,
+              date: parseISO(String(linkData.date)),
+            };
+          })
+          .sort((h1, h2) => {
+            return h1.date.getTime() - h2.date.getTime();
+          });
+
+        setHistoryScannedLinks(history);
       }
     };
     loadHistory();
   }, []);
 
   useEffect(() => {
+    if (!historyScannedLinks) {
+      return;
+    }
+
     AsyncStorage.setItem(
       '@qrcode-scanner/history',
       JSON.stringify(historyScannedLinks),
