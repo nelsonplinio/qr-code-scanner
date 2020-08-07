@@ -14,15 +14,22 @@ import {
 } from './styles';
 import { BarCodeScannerData } from '../../models/BarCodeScannerData';
 
+export interface Action {
+  iconName: string;
+  title: string;
+  onPress: (modal: Modalize | null) => void;
+}
+
 interface ScannedOptionModalProps {
   dataScanned: BarCodeScannerData;
   onClose?: () => void;
+  otherActions?: Action[];
 }
 
 const ScannedOptionModal: React.ForwardRefRenderFunction<
   Modalize,
   ScannedOptionModalProps
-> = ({ dataScanned, onClose }, modalRef) => {
+> = ({ dataScanned, onClose, otherActions }, modalRef) => {
   const [linkCopied, setLinkCopied] = useState(false);
 
   const modalHeight = useMemo(() => {
@@ -103,6 +110,17 @@ const ScannedOptionModal: React.ForwardRefRenderFunction<
             <Feather name="save" size={24} color="#666" />
             <ActionButtonText>Salvar conteudo</ActionButtonText>
           </ActionButton>
+
+          {otherActions &&
+            otherActions.map(action => (
+              <ActionButton
+                key={action.title}
+                onPress={() => action.onPress(modalRef.current)}
+              >
+                <Feather name={action.iconName} size={24} color="#666" />
+                <ActionButtonText>{action.title}</ActionButtonText>
+              </ActionButton>
+            ))}
         </ActionsContainer>
       </ModalContainer>
     </Modalize>

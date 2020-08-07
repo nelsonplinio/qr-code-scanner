@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { isToday, isYesterday, isSameYear, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-import { Animated } from 'react-native';
+import { Animated, Alert } from 'react-native';
 import { useHistoryLinkScanned } from '../../hooks/historyLinkScanned';
 import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
 
@@ -21,23 +21,7 @@ import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
 const HistoryList: React.FC = () => {
   const [scrollOffset] = useState(new Animated.Value(0));
 
-  const onScrollEvent = useCallback(
-    Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: {
-              y: scrollOffset,
-            },
-          },
-        },
-      ],
-      { useNativeDriver: true },
-    ),
-    [],
-  );
-
-  const { historyScannedLinks } = useHistoryLinkScanned();
+  const { historyScannedLinks, removeLink } = useHistoryLinkScanned();
 
   const { openOptions } = useScannerOptionsModal();
 
@@ -93,15 +77,52 @@ const HistoryList: React.FC = () => {
 
   const handleItemPressed = useCallback(
     (linkData: BarCodeScannerData) => {
-      openOptions(linkData);
+      openOptions(linkData, {
+        otherActions: [
+          {
+            title: 'Remover',
+            iconName: 'trash',
+            onPress: modal => {
+              Alert.alert(
+                'Remover link',
+                `Deseja remover esté link "${linkData.data}" do histórico?`,
+                [
+                  {
+                    text: 'Cacelar',
+                  },
+                  {
+                    text: 'Remover link',
+                    style: 'destructive',
+                    onPress: () => {
+                      removeLink(linkData);
+                      modal?.close();
+                    },
+                  },
+                ],
+              );
+            },
+          },
+        ],
+      });
     },
-    [openOptions],
+    [openOptions, removeLink],
   );
 
   return (
     <Container>
       <Animated.FlatList
-        onScroll={onScrollEvent}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrollOffset,
+                },
+              },
+            },
+          ],
+          { useNativeDriver: true },
+        )}
         data={historyList}
         keyExtractor={(linkData: BarCodeScannedWithDataFormatted) =>
           linkData.id || ''

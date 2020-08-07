@@ -45,7 +45,7 @@ const Routes: React.FC = () => {
           name="Scanner"
           component={Scanner}
           options={{
-            title: 'Scanner',
+            title: 'Scanear',
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
                 name={focused ? 'qrcode-scan' : 'qrcode'}

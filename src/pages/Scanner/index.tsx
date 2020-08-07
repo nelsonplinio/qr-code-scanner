@@ -71,8 +71,10 @@ const Scanner: React.FC = () => {
 
       saveLink(barCodeData);
 
-      openOptions(barCodeData, () => {
-        setScanned(false);
+      openOptions(barCodeData, {
+        onClosed: () => {
+          setScanned(false);
+        },
       });
     },
     [openOptions, saveLink],

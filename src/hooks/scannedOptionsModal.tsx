@@ -6,18 +6,24 @@ import React, {
   useCallback,
 } from 'react';
 import { Modalize } from 'react-native-modalize';
-import ScannedOptionModal from '../components/ScannedOptionModal';
+import ScannedOptionModal, { Action } from '../components/ScannedOptionModal';
 import { BarCodeScannerData } from '../models/BarCodeScannerData';
 
+interface OpenMethodOptions {
+  onClosed?: () => void;
+  otherActions?: Action[];
+}
+
 interface ModalContextData {
-  openOptions: (data: BarCodeScannerData, onClosed?: () => void) => void;
+  openOptions: (data: BarCodeScannerData, options?: OpenMethodOptions) => void;
   closeOptions: () => void;
   dataScanned: BarCodeScannerData;
 }
 
 interface ScannerData {
   data: BarCodeScannerData;
-  onClose: () => void;
+  onClosed?: () => void;
+  otherActions?: Action[];
 }
 
 const ModalContext = createContext<ModalContextData>({} as ModalContextData);
@@ -29,10 +35,13 @@ const ScannerOptionsModalProvider: React.FC = ({ children }) => {
     data: {},
   } as ScannerData);
 
-  const openOptions = useCallback((data: BarCodeScannerData, onClose) => {
-    setScannedData({ data, onClose });
-    modalRef.current?.open();
-  }, []);
+  const openOptions = useCallback(
+    (data: BarCodeScannerData, options: OpenMethodOptions = {}) => {
+      setScannedData({ data, ...options });
+      modalRef.current?.open();
+    },
+    [],
+  );
 
   const closeOptions = useCallback(() => {
     modalRef.current?.close();
@@ -46,7 +55,8 @@ const ScannerOptionsModalProvider: React.FC = ({ children }) => {
       <ScannedOptionModal
         ref={modalRef}
         dataScanned={scannedData.data}
-        onClose={scannedData.onClose}
+        onClose={scannedData.onClosed}
+        otherActions={scannedData.otherActions}
       />
     </ModalContext.Provider>
   );
