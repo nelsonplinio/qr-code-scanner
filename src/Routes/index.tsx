@@ -46,7 +46,6 @@ const Routes: React.FC = () => {
           component={Scanner}
           options={{
             title: 'Scanner',
-            unmountOnBlur: true,
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
                 name={focused ? 'qrcode-scan' : 'qrcode'}

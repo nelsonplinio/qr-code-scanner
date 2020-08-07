@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import { Feather } from '@expo/vector-icons';
 import { canOpenURL } from 'expo-linking';
@@ -29,6 +30,8 @@ interface BarCodeScanned {
 const Scanner: React.FC = () => {
   const { saveLink } = useHistoryLinkScanned();
   const { openOptions } = useScannerOptionsModal();
+
+  const isFocused = useIsFocused();
 
   const [scanned, setScanned] = useState(false);
 
@@ -101,14 +104,24 @@ const Scanner: React.FC = () => {
 
   return (
     <Container>
-      <CameraExpo
-        type={CameraExpo.Constants.Type.back}
-        barCodeScannerSettings={{
-          barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-        }}
-        onBarCodeScanned={scanned ? undefined : handleOnBarCodeScanned}
-        ratio="16:9"
-      />
+      {isFocused && (
+        <CameraExpo
+          type={CameraExpo.Constants.Type.back}
+          barCodeScannerSettings={{
+            barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+          }}
+          onBarCodeScanned={
+            scanned
+              ? undefined
+              : data =>
+                  handleOnBarCodeScanned({
+                    data: data.data,
+                    type: Number(data.type),
+                  })
+          }
+          ratio="16:9"
+        />
+      )}
 
       <ScannerContainer>
         <ScannerDarkBackground />
