@@ -1,4 +1,4 @@
-import { FlatList, StatusBar } from 'react-native';
+import { FlatList, StatusBar, Animated } from 'react-native';
 import styled from 'styled-components/native';
 import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
 

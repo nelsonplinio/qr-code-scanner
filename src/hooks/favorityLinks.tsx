@@ -37,7 +37,7 @@ const FavorityProvider: React.FC = ({ children }) => {
       return [
         {
           ...data,
-          id: String(Date.now),
+          id: String(data.date.getTime()),
         },
         ...currentValue,
       ];

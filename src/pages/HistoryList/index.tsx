@@ -1,15 +1,14 @@
-import React, { useMemo, useCallback, useState } from 'react';
-import { isToday, isYesterday, isSameYear, format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
-import { Animated, Alert } from 'react-native';
-import { useHistoryLinkScanned } from '../../hooks/historyLinkScanned';
-import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
-
-import { BarCodeScannerData } from '../../models/BarCodeScannerData';
-import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
-
-import { Container, HeaderContainer, Title } from './styles';
+import { format } from 'date-fns';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Alert, Animated } from 'react-native';
+import Header from '../../components/Header';
 import LinkCard from '../../components/LinkCard';
+import { useHistoryLinkScanned } from '../../hooks/historyLinkScanned';
+import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
+import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
+import { BarCodeScannerData } from '../../models/BarCodeScannerData';
+import formatDate from '../../utils/formatDate';
+import { Container } from './styles';
 
 const HistoryList: React.FC = () => {
   const [scrollOffset] = useState(new Animated.Value(0));
@@ -22,24 +21,6 @@ const HistoryList: React.FC = () => {
     () =>
       historyScannedLinks.map<BarCodeScannedWithDataFormatted>(
         (linkData, index, completeList) => {
-          const formatDate: () => string = () => {
-            if (isYesterday(linkData.date)) {
-              return 'Ontem';
-            }
-
-            if (isToday(linkData.date)) {
-              return 'Hoje';
-            }
-
-            if (isSameYear(linkData.date, new Date())) {
-              return format(linkData.date, "dd 'de' MMM", {
-                locale: ptBR,
-              });
-            }
-
-            return format(linkData.date, "dd 'de' MMM',' yyyy");
-          };
-
           const formatTime: () => string = () => {
             return format(linkData.date, 'hh:mm');
           };
@@ -47,7 +28,7 @@ const HistoryList: React.FC = () => {
           if (index === 0) {
             return {
               ...linkData,
-              header: formatDate(),
+              header: formatDate(linkData.date),
               timeFormatted: formatTime(),
             };
           }
@@ -57,7 +38,7 @@ const HistoryList: React.FC = () => {
           if (lastLinkData.date.getDate() !== linkData.date.getDate()) {
             return {
               ...linkData,
-              header: formatDate(),
+              header: formatDate(linkData.date),
               timeFormatted: formatTime(),
             };
           }
@@ -131,30 +112,7 @@ const HistoryList: React.FC = () => {
         }) => <LinkCard data={linkData} onPress={handleItemPressed} />}
       />
 
-      <HeaderContainer style={{}}>
-        <Title
-          style={{
-            transform: [
-              {
-                scale: scrollOffset.interpolate({
-                  inputRange: [0, 100],
-                  outputRange: [1, 0.5],
-                  extrapolate: 'clamp',
-                }),
-              },
-              {
-                translateY: scrollOffset.interpolate({
-                  inputRange: [0, 100],
-                  outputRange: [0, -40],
-                  extrapolate: 'clamp',
-                }),
-              },
-            ],
-          }}
-        >
-          Histórico
-        </Title>
-      </HeaderContainer>
+      <Header title="Histórico" scrollOffset={scrollOffset} />
     </Container>
   );
 };
