@@ -60,10 +60,10 @@ const Routes: React.FC = () => {
           name="SavedList"
           component={SavedList}
           options={{
-            title: 'Salvos',
+            title: 'Favoritos',
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
-                name={focused ? 'book' : 'book-outline'}
+                name={focused ? 'heart' : 'heart-outline'}
                 size={size}
                 color={color}
               />

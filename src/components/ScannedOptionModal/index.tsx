@@ -101,14 +101,14 @@ const ScannedOptionModal: React.ForwardRefRenderFunction<
             </ActionButtonText>
           </ActionButton>
 
+          <ActionButton>
+            <Feather name="heart" size={24} color="#666" />
+            <ActionButtonText>Favoritar conteudo</ActionButtonText>
+          </ActionButton>
+
           <ActionButton onPress={handleShareLink}>
             <Feather name="share" size={24} color="#666" />
             <ActionButtonText>Compartilhar conteudo</ActionButtonText>
-          </ActionButton>
-
-          <ActionButton>
-            <Feather name="save" size={24} color="#666" />
-            <ActionButtonText>Salvar conteudo</ActionButtonText>
           </ActionButton>
 
           {otherActions &&

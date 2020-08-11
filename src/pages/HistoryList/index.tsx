@@ -5,18 +5,11 @@ import { Animated, Alert } from 'react-native';
 import { useHistoryLinkScanned } from '../../hooks/historyLinkScanned';
 import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
 
-import {
-  Container,
-  HeaderContainer,
-  Title,
-  LinkItem,
-  LinkItemHeader,
-  LinkItemContent,
-  LinkItemLinkText,
-  LinkItemTime,
-} from './styles';
 import { BarCodeScannerData } from '../../models/BarCodeScannerData';
 import { useScannerOptionsModal } from '../../hooks/scannedOptionsModal';
+
+import { Container, HeaderContainer, Title } from './styles';
+import LinkCard from '../../components/LinkCard';
 
 const HistoryList: React.FC = () => {
   const [scrollOffset] = useState(new Animated.Value(0));
@@ -80,7 +73,7 @@ const HistoryList: React.FC = () => {
       openOptions(linkData, {
         otherActions: [
           {
-            title: 'Remover',
+            title: 'Remover do historico',
             iconName: 'trash',
             onPress: modal => {
               Alert.alert(
@@ -135,19 +128,7 @@ const HistoryList: React.FC = () => {
           item: linkData,
         }: {
           item: BarCodeScannedWithDataFormatted;
-        }) => (
-          <LinkItem>
-            {linkData.header && (
-              <LinkItemHeader>{linkData.header}</LinkItemHeader>
-            )}
-            <LinkItemContent onPress={() => handleItemPressed(linkData)}>
-              <LinkItemLinkText lineBreakMode="tail" numberOfLines={4}>
-                {linkData.data}
-              </LinkItemLinkText>
-              <LinkItemTime>{linkData.timeFormatted}</LinkItemTime>
-            </LinkItemContent>
-          </LinkItem>
-        )}
+        }) => <LinkCard data={linkData} onPress={handleItemPressed} />}
       />
 
       <HeaderContainer style={{}}>
