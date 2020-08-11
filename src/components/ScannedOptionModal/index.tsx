@@ -11,8 +11,10 @@ import {
   ActionsContainer,
   ActionButton,
   ActionButtonText,
+  IconContainer,
 } from './styles';
 import { BarCodeScannerData } from '../../models/BarCodeScannerData';
+import { useFavority } from '../../hooks/favorityLinks';
 
 export interface Action {
   iconName: string;
@@ -31,6 +33,8 @@ const ScannedOptionModal: React.ForwardRefRenderFunction<
   ScannedOptionModalProps
 > = ({ dataScanned, onClose, otherActions }, modalRef) => {
   const [linkCopied, setLinkCopied] = useState(false);
+
+  const { saveFavority, removeFavority, isFavorited } = useFavority();
 
   const modalHeight = useMemo(() => {
     const { height } = Dimensions.get('screen');
@@ -70,6 +74,34 @@ const ScannedOptionModal: React.ForwardRefRenderFunction<
     setLinkCopied(false);
   }, [onClose]);
 
+  const handleFavority = useCallback(() => {
+    saveFavority({
+      ...dataScanned,
+      date: new Date(),
+    });
+    modalRef.current?.close();
+  }, [modalRef, dataScanned, saveFavority]);
+
+  const handleRemoveFavority = useCallback(() => {
+    Alert.alert(
+      'Remover Favorito',
+      `Deseja realmente remover esté link "${dataScanned.data}" dos favoritos?`,
+      [
+        {
+          text: 'cancelar',
+        },
+        {
+          text: 'Remover',
+          style: 'destructive',
+          onPress: () => {
+            removeFavority(dataScanned);
+            modalRef.current?.close();
+          },
+        },
+      ],
+    );
+  }, [modalRef, removeFavority, dataScanned]);
+
   return (
     <Modalize
       ref={modalRef}
@@ -101,10 +133,25 @@ const ScannedOptionModal: React.ForwardRefRenderFunction<
             </ActionButtonText>
           </ActionButton>
 
-          <ActionButton>
-            <Feather name="heart" size={24} color="#666" />
-            <ActionButtonText>Favoritar conteudo</ActionButtonText>
-          </ActionButton>
+          {!isFavorited(dataScanned) ? (
+            <ActionButton onPress={handleFavority}>
+              <Feather name="heart" size={24} color="#666" />
+              <ActionButtonText>Favoritar conteudo</ActionButtonText>
+            </ActionButton>
+          ) : (
+            <ActionButton onPress={handleRemoveFavority}>
+              <IconContainer>
+                <Feather name="heart" size={24} color="#666" />
+                <Feather
+                  style={{ position: 'absolute', bottom: -2, right: -2 }}
+                  name="x"
+                  size={18}
+                  color="#F95E5A"
+                />
+              </IconContainer>
+              <ActionButtonText>Remover do favorito</ActionButtonText>
+            </ActionButton>
+          )}
 
           <ActionButton onPress={handleShareLink}>
             <Feather name="share" size={24} color="#666" />

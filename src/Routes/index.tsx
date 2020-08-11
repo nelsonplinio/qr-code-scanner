@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Scanner from '../pages/Scanner';
-import SavedList from '../pages/SavedList';
+import FavorityList from '../pages/FavorityList';
 import HistoryList from '../pages/HistoryList';
 
 const BottomTabNavigator = createBottomTabNavigator();
@@ -57,8 +57,8 @@ const Routes: React.FC = () => {
         />
 
         <BottomTabNavigator.Screen
-          name="SavedList"
-          component={SavedList}
+          name="FavorityList"
+          component={FavorityList}
           options={{
             title: 'Favoritos',
             tabBarIcon: ({ color, size, focused }) => (

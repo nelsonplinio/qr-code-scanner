@@ -29,6 +29,8 @@ export const ActionButton = styled(RectButton)`
   padding: 16px 0;
 `;
 
+export const IconContainer = styled.View``;
+
 export const ActionButtonText = styled.Text`
   margin-left: 16px;
   font-size: 18px;
