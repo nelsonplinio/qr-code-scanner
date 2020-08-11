@@ -22,28 +22,13 @@ const FavorityList: React.FC = () => {
       favorites.map<BarCodeScannedWithDataFormatted>(
         (linkData, index, completeList) => {
           const formatTime: () => string = () => {
-            return format(linkData.date, 'hh:mm');
+            return format(linkData.date, "'às' hh:mm");
           };
 
-          if (index === 0) {
-            return {
-              ...linkData,
-              header: formatDate(linkData.date),
-              timeFormatted: formatTime(),
-            };
-          }
-
-          const lastLinkData = completeList[index - 1];
-
-          if (lastLinkData.date.getDate() !== linkData.date.getDate()) {
-            return {
-              ...linkData,
-              header: formatDate(linkData.date),
-              timeFormatted: formatTime(),
-            };
-          }
-
-          return { ...linkData, timeFormatted: formatTime() };
+          return {
+            ...linkData,
+            timeFormatted: `${formatDate(linkData.date)} ${formatTime()}`,
+          };
         },
       ),
     [favorites],

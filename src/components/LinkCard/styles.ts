@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { RectButton } from 'react-native-gesture-handler';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const LinkItem = styled.View``;
 
@@ -32,5 +33,12 @@ export const LinkItemTime = styled.Text`
   opacity: 0.5;
   position: absolute;
   bottom: 8px;
-  right: 16px;
+  right: 8px;
+`;
+
+export const FavorityIcon = styled(MaterialCommunityIcons)`
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  opacity: 0.8;
 `;

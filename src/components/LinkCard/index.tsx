@@ -6,8 +6,10 @@ import {
   LinkItemContent,
   LinkItemLinkText,
   LinkItemTime,
+  FavorityIcon,
 } from './styles';
 import { BarCodeScannedWithDataFormatted } from '../../models/BarCodeScannedWithDataFormatted';
+import { useFavority } from '../../hooks/favorityLinks';
 
 interface LinkCardProps {
   data: BarCodeScannedWithDataFormatted;
@@ -20,6 +22,8 @@ const LinkCard: React.FC<LinkCardProps> = ({
   onPress = () => {},
   onOptionsPress = () => {},
 }) => {
+  const { isFavorited } = useFavority();
+
   return (
     <LinkItem>
       {data.header && <LinkItemHeader>{data.header}</LinkItemHeader>}
@@ -27,6 +31,11 @@ const LinkCard: React.FC<LinkCardProps> = ({
         <LinkItemLinkText lineBreakMode="tail" numberOfLines={4}>
           {data.data}
         </LinkItemLinkText>
+
+        {isFavorited(data) && (
+          <FavorityIcon size={24} name="cards-heart" color="#F95E5A" />
+        )}
+
         <LinkItemTime>{data.timeFormatted}</LinkItemTime>
       </LinkItemContent>
     </LinkItem>
