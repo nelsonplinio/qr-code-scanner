@@ -1,12 +1,19 @@
 {
-  "name": "QrCodeReader",
-  "displayName": "QrCodeReader",
+  "name": "Scaner Codes",
+  "displayName": "Scaner_Codes",
   "expo": {
-    "name": "QrCodeReader",
-    "slug": "QrCodeReader",
+    "name": "Scaner Codes",
+    "slug": "Scaner_Codes",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "githubUrl": "https://github.com/nelsonplinio/qr-code-scanner",
+    "orientation": "portrait",
+    "backgroundColor": "#24292e",
+    "icon": "./assets/icon.png",
+    "android": {
+      "package": "br.com.nplinio.scanner_codes"
+    }
   }
 }
