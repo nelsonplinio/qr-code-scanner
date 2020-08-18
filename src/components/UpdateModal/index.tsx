@@ -20,7 +20,6 @@ const UpdateModal: React.FC = () => {
     }
 
     const { isAvailable } = await Updates.checkForUpdateAsync();
-
     if (!isAvailable) {
       return;
     }
@@ -46,7 +45,6 @@ const UpdateModal: React.FC = () => {
 
   useEffect(() => {
     checkUpdates();
-    modalRef.current?.open();
   }, [checkUpdates]);
 
   return (
