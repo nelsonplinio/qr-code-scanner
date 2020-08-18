@@ -19,18 +19,17 @@ const FavorityList: React.FC = () => {
 
   const favorityList: BarCodeScannedWithDataFormatted[] = useMemo(
     () =>
-      favorites.map<BarCodeScannedWithDataFormatted>(
-        (linkData, index, completeList) => {
-          const formatTime: () => string = () => {
-            return format(linkData.date, "'às' hh:mm");
-          };
+      favorites.map<BarCodeScannedWithDataFormatted>(linkData => {
+        const formatTime: () => string = () => {
+          return format(linkData.date, "'às' hh:mm");
+        };
 
-          return {
-            ...linkData,
-            timeFormatted: `${formatDate(linkData.date)} ${formatTime()}`,
-          };
-        },
-      ),
+        return {
+          ...linkData,
+          header: null,
+          timeFormatted: `${formatDate(linkData.date)} ${formatTime()}`,
+        };
+      }),
     [favorites],
   );
 
