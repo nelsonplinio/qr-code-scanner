@@ -13,7 +13,10 @@
     "backgroundColor": "#24292e",
     "icon": "./assets/icon.png",
     "android": {
-      "package": "br.com.nplinio.scanner_codes"
+      "package": "br.com.nplinio.scanner_codes",
+      "permissions": [
+        "CAMERA"
+      ]
     }
   }
 }
